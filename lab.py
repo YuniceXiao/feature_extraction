@@ -1,20 +1,24 @@
 #!/usr/bin/env python
 import argparse
+from util import load_reviews, shuffle_dataset
+import numpy as np
 
 
 def main(data_file):
     """extract function word features from a text file"""
 
-    max_reviews = 10
-    reviews = []
-    with open(data_file, 'r') as df:
-        for line in df:
-            fields = line.strip().split("\t")
-            reviews.append(fields[-1])
-            if len(reviews) >= max_reviews:  # just read a few to debug
-                break
+    # TODO: parse the review file. Field [0] per line is the review ID. Field[-1] is the review
+    reviews, ids = load_reviews(data_file)
+
+    # debug using just a few
+    reviews = reviews[:10]
+    ids = ids[:10]
 
     feature_key = ["the", "or", "and"]
+
+    print(f"loading feature vectors for {len(reviews)} reviews")
+    feature_lists = []
+    feature_np = np.zeros(((len(reviews)), len(feature_key)), dtype=np.int)
 
     lab_instructions = """ For function words "the", "or" and "and", use a Python list to 
     make a count vector per review
@@ -27,22 +31,27 @@ def main(data_file):
     Verify your numpy and lists are consistent"""
 
     print(f"instructions: {lab_instructions}")
+    print(feature_lists)
+    print(feature_np)
 
-    # part 2
 
-    lab_instructions2 = """for the first ten reviews in the dataset, load the authors (field 1 on each line)
-        make a key, {author_id : class_index}. Start class index at 0
-        create a np array y of shape (num_reviews,) as your data labels"""
+    lab_instructions2 = """Shuffle the list of id's and the feature matrix in unison. Then check your work"""
 
     print(f"instructions: {lab_instructions2}")
 
+    print(f"Shuffling data")
+    shuffled_feature_matrix, shuffled_ids = shuffle_dataset(feature_np, ids)
+    print("ids before shuffle")
+    print(ids)
+    print("ids after shuffle")
+    print(shuffled_ids)
 
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='feature vector homework')
+    parser = argparse.ArgumentParser(description='feature vector lab')
     parser.add_argument('--path', type=str, default="imdb_practice.txt",
-                        help='path to the menu to update')
+                        help='path to input with one review per line')
 
     args = parser.parse_args()
 

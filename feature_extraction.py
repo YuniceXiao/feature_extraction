@@ -1,23 +1,23 @@
 #!/usr/bin/env python
 import argparse
 import numpy as np
+from util import load_function_words, load_reviews, split_data
 
-def load_function_words(resource_path):
-    """load a newline separated text file of function words.
-    Return a list"""
-    f_words = []
-    with open(resource_path, 'r') as f:
-        for line in f:
-            if line.strip():
-                f_words.append(line.lower().strip())
-    return f_words
+# do not alter this function
+def check_splits(train, val, X, ids):
+    """verify that all data is retained after splitting"""
+    # check X
+    train_X = train[0]
+    val_X = val[0]
+    sum_after = train_X.sum()+val_X.sum()
+    assert sum_after == X.sum(), \
+        f"Sum of features in Train+Test {sum_after} must equal sum of features before splitting {X.sum}"
 
-# TODO: write this function
-def split_dataset(X, y, hold_out_percent):
-    """shuffle and split the dataset. Returns two tuples:
-    (X_train, y_train, train_indices): train inputs
-    (X_val, y_val, val_indices): validation inputs"""
-    return ((X,y,np.arange(X.shape[0])), (X,y,np.arange(X.shape[0])))
+    all_ids = train[1] + test[1]
+    assert set(all_ids) == set(ids), "Set of ids in Train+Test must equal set of ids before splitting"
+    # if we didn't crash, everything's good!
+    print("Split checks passed!")
+
 
 
 def main(data_file, vocab_path):
@@ -26,14 +26,10 @@ def main(data_file, vocab_path):
     # load resources and text file
     function_words = load_function_words(vocab_path)
 
-    reviews = []
-    with open(data_file, 'r') as data_file:
-        for line in data_file:
-            fields = line.strip().split("\t")
-            reviews.append(fields[-1])
+    reviews, ids = load_reviews(data_file)
 
 
-    # TODO: fill this matrix
+    # TODO: appropriately shape and fill this matrix
     review_features = np.zeros((1,1), dtype=np.int)
     # row is which review
     # column is which word
@@ -74,38 +70,20 @@ def main(data_file, vocab_path):
     min_matrix_shape = min_matrix.shape
     print(f"Shape after removing features that occur < {min_count} times: {min_matrix_shape}")
 
-
-    # TODO: load author data into a label array, assigning a class index per unique author (see lab)
-    #  Author ID's are index 1 in the file
-    labels = np.zeros(len(reviews), dtype=np.int)
-
     #TODO: split the dataset by updating the function above
 
-    train, val = split_dataset(review_features, labels, 0.9)
+    train, val = split_data(review_features, ids, 0.3)
 
     # Code below that all your data has been retained in your splits; do not edit.
     # Must all print True
 
-    # check X
-    train_X = train[0]
-    val_X = val[0]
-    same_x = (train_X.sum()+val_X.sum()) == review_features.sum()
-    print(f"Same X sum {same_x}")
-    # check y
-    train_y = train[1]
-    val_y = val[1]
-    same_y = (train_y.sum()+val_y.sum()) == labels.sum()
-    print(f"Same y sum {same_y}")
-    # check that all labels are assigned
-    all_indexes = list(train[2]) + list(val[2])
-    indexes_there = sorted(all_indexes) == list(np.arange(review_features.shape[0]))
-    print(f"all indexes retained: {indexes_there}")
+    check_splits(train, val, review_features, ids)
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='feature vector homework')
     parser.add_argument('--path', type=str, default="imdb_practice.txt",
-                        help='path to the menu to update')
+                        help='path to input with one review per line')
     parser.add_argument('--function_words_path', type=str, default="ewl_function_words.txt",
                         help='path to the list of words to use as features')
     args = parser.parse_args()
