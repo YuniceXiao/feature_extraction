@@ -3,10 +3,8 @@ Most common word: the, count: 9014
 No instances found for: 
   nineteen
   fifty
-Sum of raw count matrix: 63031
-Sum of binary matrix: 20887
-Sum of normed matrix: 36.06819727994063
+Sum of raw count matrix: 64624
+Sum of binary matrix: 21182
+Sum of normed matrix: 500.0
 Shape after removing features that occur < 100 times: (500, 81)
-Same X sum True
-Same y sum True
-all indexes retained: True
+Split checks passed!

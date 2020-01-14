@@ -17,6 +17,14 @@ https://stackoverflow.com/questions/4601373/better-way-to-shuffle-two-numpy-arra
 
 # Files
 
+## imdb_practice.txt / imdb_grade.txt
+
+TSV files of IMDB reviews used for debugging and grading.
+
+## imdb_practice_result.txt
+
+Desired output for `feature_extraction.py` on `imdb_practice.txt`. 
+
 ## util.py
 
 Utility functions for data loading and splitting. 
