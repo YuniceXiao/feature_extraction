@@ -46,9 +46,12 @@ def split_data(X, file_ids, test_percent = 0.3, shuffle=True):
     """
     if shuffle:
         X, file_ids = shuffle_dataset(X, file_ids)
-    data_size = len(X)
-    num_test = int(test_percent * data_size)
 
-    train = (X[:-num_test], file_ids[:-num_test])
-    test = (X[-num_test:], file_ids[-num_test:])
+    # edit this to split the dataset
+    X_train = X
+    X_test = X
+    file_ids_train = file_ids
+    file_ids_test = file_ids
+    train = X_train, file_ids_train
+    test = X_test, file_ids_test
     return train, test

@@ -4,11 +4,11 @@ import numpy as np
 from util import load_function_words, load_reviews, split_data
 
 # do not alter this function
-def check_splits(train, val, X, ids):
+def check_splits(train, test, X, ids):
     """verify that all data is retained after splitting"""
     # check X
     train_X = train[0]
-    val_X = val[0]
+    val_X = test[0]
     sum_after = train_X.sum()+val_X.sum()
     assert sum_after == X.sum(), \
         f"Sum of features in Train+Test {sum_after} must equal sum of features before splitting {X.sum}"
@@ -59,12 +59,12 @@ def main(data_file, vocab_path):
     word_binary_sum = word_binary.sum()
     print(f"Sum of binary matrix: {word_binary_sum}")
 
-    # TODO: normalize features by review length (divide rows by length of review)
+    # TODO: normalize features by review length (divide rows by number of words in the review)
     norm_reviews = np.copy(review_features)
     norm_reviews_sum = norm_reviews.sum()
     print(f"Sum of normed matrix: {norm_reviews_sum}")
 
-    # TODO: remove features from <review_features> that occur less than min_count times
+    # TODO: remove features from <review_features> that occur less than <min_count> times
     min_count = 100
     min_matrix = np.copy(review_features)
     min_matrix_shape = min_matrix.shape

@@ -24,7 +24,7 @@ Includes functions that must be completed for lab and homework.
 
 ## lab.py
 
-Creates and splits feature vectors.
+Creates and shuffles feature vectors.
 
 Usage `python lab.py --path imdb_practice.txt`
 
