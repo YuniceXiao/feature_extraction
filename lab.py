@@ -2,6 +2,7 @@
 import argparse
 from util import load_reviews, shuffle_dataset
 import numpy as np
+from nltk import word_tokenize
 
 
 def main(data_file):
@@ -22,11 +23,29 @@ def main(data_file):
     # TODO: For function words "the", "or" and "and", use a Python list to
     #     make a count vector per review
     feature_lists = []
+    for review in reviews:
+        review_words = word_tokenize(review.lower())
+        vec = []
+        for word in feature_key:
+            these_words = [w for w in review_words if w == word]
+            vec.append(len(these_words))
+        feature_lists.append(vec)
+
+    print(feature_lists)
 
     # TODO: Create the same feature vectors as a numpy array
     feature_np = np.zeros(((len(reviews)), len(feature_key)), dtype=np.int)
+    for i,review in enumerate(reviews):
+        review_words = word_tokenize(review.lower())
+        for j,word in enumerate(feature_key):
+            these_words = [w for w in review_words if w == word]
+            feature_np[i,j] = len(these_words)
+
+    print(feature_np)
 
     # TODO: Cast your feature_lists to a numpy array and then verify it is equivalent to feature_np
+    feature_lists_np = np.asarray(feature_lists)
+    print(f'equal? {np.array_equal(feature_lists_np, feature_np)}')
 
     # TODO: Shuffle the list of id's and the feature matrix in unison. Then check your work
     print(f"Shuffling data")

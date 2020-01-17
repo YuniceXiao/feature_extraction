@@ -20,6 +20,11 @@ def load_reviews(data_file):
     """
     reviews = []
     ids = []
+    with open(data_file, 'r') as df:
+        for line in df:
+            fields = line.strip().split("\t")
+            reviews.append(fields[-1])
+            ids.append(fields[0])
     return reviews,ids
 
 # TODO: write this function (lab)
@@ -30,8 +35,9 @@ def shuffle_dataset(data, id_strs):
     :param id_strs: iterable, each item an id
     :return: tuple (shuffled_data, shuffled_id_strs)
     """
-    shuffled_ids = id_strs
-    shuffled_data = data
+    new_order = np.random.permutation(len(id_strs))
+    shuffled_ids = [id_strs[i] for i in new_order]
+    shuffled_data = data[new_order]
     return (shuffled_data, shuffled_ids)
 
 # TODO: write this function (homework)
