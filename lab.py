@@ -2,6 +2,7 @@
 import argparse
 from util import load_reviews, shuffle_dataset
 import numpy as np
+from nltk import words_tokenize
 
 
 def main(data_file):
@@ -22,6 +23,8 @@ def main(data_file):
     # TODO: For function words "the", "or" and "and", use a Python list to
     #     make a count vector per review
     feature_lists = []
+    for review in reviews:
+
 
     # TODO: Create the same feature vectors as a numpy array
     feature_np = np.zeros(((len(reviews)), len(feature_key)), dtype=np.int)

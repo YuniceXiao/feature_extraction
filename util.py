@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import numpy as np
+from sklearn.utils import shuffle
 
 def load_function_words(resource_path):
     """load a newline separated text file of function words.
@@ -20,6 +21,11 @@ def load_reviews(data_file):
     """
     reviews = []
     ids = []
+    with open(data_file, 'r') as df:
+        for line in df:
+            fields = line.strip().split("\t")
+            reviews.append(fields[-1])
+            ids.append(fields[0])
     return reviews,ids
 
 # TODO: write this function (lab)
@@ -30,8 +36,7 @@ def shuffle_dataset(data, id_strs):
     :param id_strs: iterable, each item an id
     :return: tuple (shuffled_data, shuffled_id_strs)
     """
-    shuffled_ids = id_strs
-    shuffled_data = data
+    shuffled_data, shuffled_ids = shuffle(data, id_strs)
     return (shuffled_data, shuffled_ids)
 
 # TODO: write this function (homework)
@@ -48,10 +53,11 @@ def split_data(X, file_ids, test_percent = 0.3, shuffle=True):
         X, file_ids = shuffle_dataset(X, file_ids)
 
     # edit this to split the dataset
-    X_train = X
-    X_test = X
-    file_ids_train = file_ids
-    file_ids_test = file_ids
+    split_point = round(len(X)*test_percent)
+    X_train = X[split_point:]
+    X_test = X[:split_point]
+    file_ids_train = file_ids[split_point:]
+    file_ids_test = file_ids[:split_point]
     train = X_train, file_ids_train
     test = X_test, file_ids_test
     return train, test
